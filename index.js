@@ -27,31 +27,33 @@ const auth = require('./middleware/auth');
 
 //RUTAS
 //RUTAS DEL DER
-const UsuarioAdmRoutes = require('./routes/usuario_admin.routes');
-const TipoRoutes= require('./routes/usuario_tipo.routes');
-const FormaRoutes = require('./routes/forma_pago.routes');
+const Usuario_Admin = require('./routes/usuario_admin.routes');
+const Tipo_usuario= require('./routes/usuario_tipo.routes');
+const Forma_pago = require('./routes/forma_pago.routes');
 const Tarifa = require('./routes/tarifa.routes');
-const TipoMoneda = require('./routes/moneda_tipo.routes');
+const Moneda_tipo = require('./routes/moneda_tipo.routes');
 const Cliente = require('./routes/cliente.routes');
 const Adicional = require('./routes/adicional.routes');
-const TipoAlojamiento = require('./routes/alojamiento_tipo.routes');
-const EstadoAlojamiento = require('./routes/alojamiento_estado.routes');
+const Alojamiento_tipo = require('./routes/alojamiento_tipo.routes');
+const Alojamiento_estado = require('./routes/alojamiento_estado.routes');
 const Alojamiento = require('./routes/alojamiento.routes');
 const Tarifa_X_Tipo = require('./routes/tarifa_x_tipo.routes');
 const Reserva = require('./routes/reserva.routes');
+const Reserva_X_Adicional = require('./routes/reserva_x_adcional.routes');
 
-app.use('/usuario_admin', UsuarioAdmRoutes);
-app.use('/tipo_usuario', TipoRoutes);
-app.use('/forma_pago', FormaRoutes);
+app.use('/usuario_admin', Usuario_Admin);
+app.use('/tipo_usuario', Tipo_usuario);
+app.use('/forma_pago', Forma_pago);
 app.use('/tarifa', Tarifa);
-app.use('/tipo_moneda', TipoMoneda);
+app.use('/tipo_moneda', Moneda_tipo);
 app.use('/cliente', Cliente);
 app.use('/adicional', Adicional);
-app.use('/tipo_alojamiento', TipoAlojamiento);
-app.use('/estado_alojamiento', EstadoAlojamiento);
+app.use('/alojamiento_tipo', Alojamiento_tipo);
+app.use('/alojamiento_estado', Alojamiento_estado);
 app.use('/alojamiento', Alojamiento);
 app.use('/tarifa_x_tipo', Tarifa_X_Tipo);
 app.use('/reservas', Reserva);
+app.use('/reserva_x_adicional', Reserva_X_Adicional);
 
 
 const PORT = process.env.PORT || 3000;

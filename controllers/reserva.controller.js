@@ -1,3 +1,4 @@
+const { Reserva } = require('../models');
 const db = require('../models');
 
 exports.principal = (req, res) => {
@@ -24,32 +25,32 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.Reserva.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.nuevo = async (req, res) => {
 
-    const usuario = await db.UsuarioAdm.findOne({
-        where: { id: 3 }
-    });
-
-    const cliente = await db.Cliente.findOne({
-        where: { id: 1 }
-    }); 
-
-    const alojamiento = await db.Alojamiento.findOne({
-        where: { id: 3 }
-    });
-
-    const formaPago = await db.FormaPago.findOne({
-        where: { id: 2 }
-    });
-
     const nuevaReserva = {
 
-        UsuarioAdmId: usuario.id,
-        ClienteId: cliente.id,
-        AlojamientoId: alojamiento.id,
+        UsuarioAdmId: req.body.UsuarioAdmId,
+        ClienteId: req.body.ClienteId,
+        AlojamientoId: req.body.AlojamientoId,
         check_in: req.body.check_in,
         check_out: req.body.check_out,
         cantidad_noches: req.body.cantidad_noches,
@@ -58,7 +59,7 @@ exports.nuevo = async (req, res) => {
         total_pagar: req.body.total_pagar,
         seña: req.body.seña,
         saldo_pagar: req.body.saldo_pagar,
-        FormaPagoId: formaPago.id,
+        FormaPagoId: req.body.FormaPagoId,
         observacion: req.body.observacion
     }
 
@@ -85,6 +86,9 @@ exports.nuevo = async (req, res) => {
 exports.editar = (req, res) => {
 
     let registroActualizar = {
+        UsuarioAdmId: req.body.UsuarioAdmId,
+        ClienteId: req.body.ClienteId,
+        AlojamientoId: req.body.AlojamientoId,
         check_in: req.body.check_in,
         check_out: req.body.check_out,
         cantidad_noches: req.body.cantidad_noches,
@@ -92,7 +96,8 @@ exports.editar = (req, res) => {
         cantidad_niños: req.body.cantidad_niños,
         total_pagar: req.body.total_pagar,
         seña: req.body.seña,
-        forma_pago: req.body.forma_pago,
+        saldo_pagar: req.body.saldo_pagar,
+        FormaPagoId: req.body.FormaPagoId,
         observacion: req.body.observacion
     };
 

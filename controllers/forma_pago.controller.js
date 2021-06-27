@@ -19,7 +19,23 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.FormaPago.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.nuevo = async (req, res) => { 

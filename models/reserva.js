@@ -44,3 +44,4 @@ module.exports = (sequelize, Sequelize) => {
 
     return Reserva;
 }
+//Sistema de posicionamiento

@@ -6,7 +6,7 @@ const ClienteController = require('../controllers/cliente.controller');
 
 // de acceso privado
 ClienteRoutes.get('/', auth, ClienteController.principal );//Busca a todos
-ClienteRoutes.get('/buscar', auth, ClienteController.buscar );//Busca uno
+ClienteRoutes.get('/buscar/:key/:value', auth, ClienteController.buscar );//Busca uno
 ClienteRoutes.put('/editar', auth, ClienteController.editar );//Editar info de cliente
 ClienteRoutes.delete('/eliminar', auth, ClienteController.eliminar );//Eliminar al cliente
 

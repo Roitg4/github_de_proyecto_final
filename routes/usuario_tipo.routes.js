@@ -1,11 +1,11 @@
 const TipoRoutes = require('express').Router();
-
+const auth = require('../middleware/auth');
 const TipoController = require('../controllers/usuario_tipo.controllers');
 
-TipoRoutes.get('/', TipoController.principal);
-TipoRoutes.get('/buscar/:key/:value', TipoController.buscar);
-TipoRoutes.post('/nuevo', TipoController.nuevo);
-TipoRoutes.put('/editar', TipoController.editar);
-TipoRoutes.delete('/eliminar', TipoController.eliminar);
+TipoRoutes.get('/', auth, TipoController.principal);
+TipoRoutes.get('/buscar/:key/:value', auth, TipoController.buscar);
+TipoRoutes.post('/nuevo', auth, TipoController.nuevo);
+TipoRoutes.put('/editar', auth, TipoController.editar);
+TipoRoutes.delete('/eliminar', auth, TipoController.eliminar);
 
 module.exports = TipoRoutes;

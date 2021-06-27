@@ -4,7 +4,7 @@ exports.principal = (req, res) => {
 
     db.Tarifa.findAll({
         attributes: ["id", "nombre", "fecha_inicio", "fecha_fin", "tarifa"],
-        include: [{ model: db.TipoMoneda, attributes: ["id", "tipo_moneda"] }]
+        include: [{ model: db.Moneda_tipo, attributes: ["id", "nombre", "codigo"] }]
     }).then(registros => {
 
     res.status(200).send(registros);
@@ -20,21 +20,33 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.Tarifa.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.nuevo = async (req, res) => { 
-
-    const tipoMoneda = await db.TipoMoneda.findOne({
-        where: { codigo: 'ARS' }
-    });
 
     const nuevoTarifa = {
         nombre: req.body.nombre,
         fecha_inicio: req.body.fecha_inicio,
         fecha_fin: req.body.fecha_fin,
         tarifa: req.body.tarifa,
-        TipoMonedaId: tipoMoneda.id
+        TipoMonedaId: req.body.TipoMonedaId
     }
 
     console.log("Antes de guardar -> DATOS REC: ",nuevoTarifa);
@@ -64,6 +76,7 @@ exports.editar = (req, res) => {
         fecha_inicio: req.body.fecha_inicio,
         fecha_fin: req.body.fecha_fin,
         tarifa: req.body.tarifa,
+        TipoMonedaId: req.body.TipoMonedaId
     };
 
     const id = req.body.id;

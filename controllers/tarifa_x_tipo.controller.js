@@ -5,7 +5,7 @@ exports.principal = (req, res) => {
     db.TarifaxTipo.findAll({
         attributes: ["id"],
         include: [{ model: db.Tarifa, attributes: ["id", "nombre", "fecha_inicio", "fecha_fin", "tarifa"]}, 
-        { model: db.TipoAlojamiento, attributes: ["id", "tipo_alojamiento"]}]
+        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"]}]
     }).then(registros => {
 
     res.status(200).send(registros);
@@ -21,22 +21,30 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.TarifaxTipo.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.nuevo = async (req, res) => { 
 
-    const tarifaid = await db.Tarifa.findOne({
-        where: { id: 1 }
-    });
-    
-    const tipoAlojamiento = await db.TipoAlojamiento.findOne({
-        where: { id: 2 }
-    });
-
     const nuevoTarifaxTipo = {
-        TarifaId: tarifaid.id,
-        TipoAlojamientoId: tipoAlojamiento.id
+        TarifaId: req.body.TarifaId,
+        TipoAlojamientoId: req.body.TipoAlojamientoId
     }
 
     console.log("Antes de guardar -> DATOS REC: ",nuevoTarifaxTipo);
@@ -62,8 +70,8 @@ exports.nuevo = async (req, res) => {
 exports.editar = (req, res) => {
 
     let registroActualizar = {
-        TarifaId: tarifaid.id,
-        TipoAlojamientoId: tipoAlojamiento.id
+        TarifaId: req.body.TarifaId,
+        TipoAlojamientoId: req.body.TipoAlojamientoId
     };
 
     const id = req.body.id;

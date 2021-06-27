@@ -2,7 +2,7 @@ const db = require('../models');
 
 exports.principal = (req, res) => {
 
-    db.TipoAlojamiento.findAll({
+    db.Alojamiento_tipo.findAll({
         attributes: ["id", "tipo_alojamiento" ],
     }).then(registros => {
 
@@ -19,7 +19,23 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.Alojamiento_tipo.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.nuevo = async (req, res) => { 
@@ -30,7 +46,7 @@ exports.nuevo = async (req, res) => {
 
     console.log("Antes de guardar -> DATOS REC: ",nuevoTipoAlojamiento);
 
-    db.TipoAlojamiento.create(nuevoTipoAlojamiento).then((registro) =>{
+    db.Alojamiento_tipo.create(nuevoTipoAlojamiento).then((registro) =>{
 
         res.status(200).send({ 
             msg: 'Creado correctamente ******* ',
@@ -56,7 +72,7 @@ exports.editar = (req, res) => {
 
     const id = req.body.id;
 
-    db.TipoAlojamiento.update(registroActualizar, {
+    db.Alojamiento_tipo.update(registroActualizar, {
         where: { id: id },
     })
         .then((cant) => {
@@ -82,7 +98,7 @@ exports.editar = (req, res) => {
 exports.eliminar = async (req, res) => {
 
     try {
-        await db.TipoAlojamiento.destroy({
+        await db.Alojamiento_tipo.destroy({
             where: {
               id: req.body.id
             }

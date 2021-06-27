@@ -8,7 +8,7 @@ exports.principal = (req, res) => {
 
     db.UsuarioAdm.findAll({
         attributes: ["id", "nombre", "email"],
-        include: [{ model: db.TipoUsuario, attributes: ["id", "tipo_usuario"] }]
+        include: [{ model: db.Usuario_tipo, attributes: ["id", "tipo_usuario"] }]
     }).then(registros => {
 
         res.status(200).send(registros);
@@ -31,15 +31,11 @@ exports.registro = async (req, res) => {
 
     const passEncriptada = await bcrypt.hash(req.body.password, 12); //ENCRIPTADO DE LA CONTRASEÑA  
 
-    const tipoBase = await db.TipoUsuario.findOne({
-        where: { tipo_usuario: 'Administrador' }
-    });
-
     const nuevoUsuario = {
         nombre: req.body.nombre,
         password: passEncriptada,
         email: req.body.email,
-        TipoUsuarioId: tipoBase.id
+        TipoUsuarioId: req.body.TipoUsuarioId
     }
 
     console.log("Antes de guardar -> DATOS REC: ", nuevoUsuario);
@@ -108,7 +104,8 @@ exports.editar = (req, res) => {
     let registroActualizar = {
         nombre: req.body.nombre,
         password: req.body.password,
-        email: req.body.email
+        email: req.body.email,
+        TipoUsuarioId: req.body.TipoUsuarioId
     };
 
     const id = req.body.id;

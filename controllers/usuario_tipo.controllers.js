@@ -1,7 +1,7 @@
 const db = require("../models");
 
 exports.principal = (req, res) => {
-  db.TipoUsuario.findAll({
+  db.Usuario_tipo.findAll({
     attributes: ["id", "tipo_usuario"],
     order: [
       ["tipo_usuario", "DESC"]
@@ -25,7 +25,7 @@ exports.buscar = (req, res) => {
   const key = req.params.key;
   const value = req.params.value;   
 
-  db.TipoUsuario.findAll({
+  db.Usuario_tipo.findAll({
     attributes: ["id", "tipo_usuario"],
     where: { [key]: value},
     order: [
@@ -48,7 +48,7 @@ exports.nuevo = (req, res) => {
     tipo_usuario: req.body.tipo_usuario
   };
 
-  db.TipoUsuario.create(nuevoRegistro)
+  db.Usuario_tipo.create(nuevoRegistro)
     .then((reg) => {
       res.status(200).send({
         msg: "OK creado correctamente ",
@@ -72,7 +72,7 @@ exports.editar = (req, res) => {
 
   const id = req.body.id;
 
-  db.TipoUsuario.update(registroActualizar, {
+  db.Usuario_tipo.update(registroActualizar, {
       where: { id: id },
   })
       .then((cant) => {
@@ -98,7 +98,7 @@ exports.editar = (req, res) => {
 exports.eliminar = async (req, res) => {
 
   try {
-      await db.TipoUsuario.destroy({
+      await db.Usuario_tipo.destroy({
           where: {
             id: req.body.id
           }

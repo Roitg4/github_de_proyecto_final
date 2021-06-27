@@ -2,7 +2,7 @@ const db = require('../models');
 
 exports.principal = (req, res) => {
 
-    db.TipoMoneda.findAll({
+    db.Moneda_tipo.findAll({
         attributes: ["id", "nombre", "codigo" ],
     }).then(registros => {
 
@@ -19,8 +19,25 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.Moneda_tipo.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
+
 
 exports.nuevo = async (req, res) => { 
 
@@ -31,7 +48,7 @@ exports.nuevo = async (req, res) => {
 
     console.log("Antes de guardar -> DATOS REC: ",nuevoTipoMoneda);
 
-    db.TipoMoneda.create(nuevoTipoMoneda).then((registro) =>{
+    db.Moneda_tipo.create(nuevoTipoMoneda).then((registro) =>{
 
         res.status(200).send({ 
             msg: 'Creado correctamente ******* ',
@@ -58,7 +75,7 @@ exports.editar = (req, res) => {
 
     const id = req.body.id;
 
-    db.TipoMoneda.update(registroActualizar, {
+    db.Moneda_tipo.update(registroActualizar, {
         where: { id: id },
     })
         .then((cant) => {
@@ -84,7 +101,7 @@ exports.editar = (req, res) => {
 exports.eliminar = async (req, res) => {
 
     try {
-        await db.TipoMoneda.destroy({
+        await db.Moneda_tipo.destroy({
             where: {
               id: req.body.id
             }

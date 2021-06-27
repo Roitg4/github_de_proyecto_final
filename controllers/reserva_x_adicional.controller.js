@@ -2,18 +2,22 @@ const db = require('../models');
 
 exports.principal = (req, res) => {
 
-    db.Adicional.findAll({
-        attributes: ["id", "tipo_adicional", "descripcion" ]
+    db.ReservaxAdicional.findAll({
+        attributes: ["id"],
+        include: [{
+            model: db.Reserva, attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos", 
+            "cantidad_niños", "total_pagar", "seña", "saldo_pagar", "observacion"]},
+        { model: db.Adicional, attributes: ["id", "tipo_adicional", "descripcion"] }]
     }).then(registros => {
 
-    res.status(200).send(registros);
+        res.status(200).send(registros);
 
     }).catch((err) => {
 
-        res.status(500).send({ 
+        res.status(500).send({
             msg: 'Error al recuperar los datos ******* ',
             err
-             
+
         });
     })
 }
@@ -22,7 +26,7 @@ exports.buscar = (req, res) => {
     const key = req.params.key
     const value = req.params.value
 
-    db.Adicional.findAll({
+    db.ReservaxAdicional.findAll({
         where: {[key]: value},
         atributes: ['id']
 
@@ -38,43 +42,43 @@ exports.buscar = (req, res) => {
     })
 }
 
-exports.nuevo = async (req, res) => { 
+exports.nuevo = async (req, res) => {
 
-    const nuevoAdicional = {
-        tipo_adicional: req.body.tipo_adicional,
-        descripcion: req.body.descripcion
+    const nuevoReservaAdicional = {
+        ReservaId: req.body.ReservaId,
+        AdicionalId: req.body.AdicionalId
     }
 
-    console.log("Antes de guardar -> DATOS REC: ",nuevoAdicional);
+    console.log("Antes de guardar -> DATOS REC: ", nuevoReservaAdicional);
 
-    db.Adicional.create(nuevoAdicional).then((registro) =>{
+    db.ReservaxAdicional.create(nuevoReservaAdicional).then((registro) => {
 
-        res.status(200).send({ 
+        res.status(200).send({
             msg: 'Creado correctamente ******* ',
-            registro    
+            registro
         });
 
-    }).catch((err) =>{
+    }).catch((err) => {
 
-        res.status(500).send({ 
+        res.status(500).send({
             msg: 'Error al crear ******* ',
             err
-             
+
         });
 
-    });  
+    });
 }
 
 exports.editar = (req, res) => {
 
     let registroActualizar = {
-        tipo_adicional: req.body.tipo_adicional,
-        descripcion: req.body.descripcion
+        ReservaId: req.body.ReservaId,
+        AdicionalId: req.body.AdicionalId
     };
 
     const id = req.body.id;
 
-    db.Adicional.update(registroActualizar, {
+    db.ReservaxAdicional.update(registroActualizar, {
         where: { id: id },
     })
         .then((cant) => {
@@ -100,12 +104,12 @@ exports.editar = (req, res) => {
 exports.eliminar = async (req, res) => {
 
     try {
-        await db.Adicional.destroy({
+        await db.ReservaxAdicional.destroy({
             where: {
-              id: req.body.id
+                id: req.body.id
             }
-          });
-        res.status(200).send({ message: 'El adicional se elimino correctamente' });
+        });
+        res.status(200).send({ message: 'La tabla reserva x adicional se elimino correctamente' });
     } catch (error) {
         res.status(500).send({ message: 'No se pudo efectuar la accion de eliminar', error });
     }
