@@ -6,7 +6,7 @@ const app = express();
 
 //Control de urls que acceden a nuestra API
 const corsOptions = {
-    origin: [ "https://localhost:4000", "http://localhost" ]
+    origin: [ "http://localhost:4000", "http://localhost" ]
 }
 
 app.use(express.json()); //Anteriormente BOODYPARSER
@@ -28,7 +28,7 @@ const auth = require('./middleware/auth');
 //RUTAS
 //RUTAS DEL DER
 const Usuario_Admin = require('./routes/usuario_admin.routes');
-const Tipo_usuario= require('./routes/usuario_tipo.routes');
+const Tipo_usuario= require('./routes/tipo_usuario.routes');
 const Forma_pago = require('./routes/forma_pago.routes');
 const Tarifa = require('./routes/tarifa.routes');
 const Moneda_tipo = require('./routes/moneda_tipo.routes');
@@ -41,20 +41,24 @@ const Tarifa_X_Tipo = require('./routes/tarifa_x_tipo.routes');
 const Reserva = require('./routes/reserva.routes');
 const Reserva_X_Adicional = require('./routes/reserva_x_adcional.routes');
 
-app.use('/usuario_admin', Usuario_Admin);
-app.use('/tipo_usuario', Tipo_usuario);
-app.use('/forma_pago', Forma_pago);
-app.use('/tarifa', Tarifa);
-app.use('/tipo_moneda', Moneda_tipo);
-app.use('/cliente', Cliente);
-app.use('/adicional', Adicional);
-app.use('/alojamiento_tipo', Alojamiento_tipo);
-app.use('/alojamiento_estado', Alojamiento_estado);
-app.use('/alojamiento', Alojamiento);
-app.use('/tarifa_x_tipo', Tarifa_X_Tipo);
-app.use('/reservas', Reserva);
-app.use('/reserva_x_adicional', Reserva_X_Adicional);
 
+app.use('/usuario-admin', Usuario_Admin);
+app.use('/tipo-usuario', Tipo_usuario);
+app.use('/forma-pago', auth, Forma_pago);
+app.use('/tarifa', auth, Tarifa);
+app.use('/tipo-moneda', auth, Moneda_tipo);
+app.use('/cliente', Cliente);
+app.use('/adicional', auth, Adicional);
+app.use('/alojamiento-tipo', auth, Alojamiento_tipo);
+app.use('/alojamiento-estado', auth, Alojamiento_estado);
+app.use('/alojamiento', auth, Alojamiento);
+app.use('/tarifa-x-tipo', auth, Tarifa_X_Tipo);
+app.use('/reservas', auth, Reserva);
+app.use('/reserva-x-adicional', auth, Reserva_X_Adicional);
+
+//Web 
+//Accesos get publicos
+//Consultas
 
 const PORT = process.env.PORT || 3000;
 

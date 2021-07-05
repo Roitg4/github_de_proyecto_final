@@ -21,7 +21,7 @@ db.sequelize = sequelize;
 
 //MODELOS DEL DER
 db.UsuarioAdm = require('./usuario_admin')(sequelize, Sequelize);
-db.Usuario_tipo = require('./usuario_tipo')(sequelize, Sequelize); 
+db.Tipo_Usuario = require('./tipo_usuario')(sequelize, Sequelize); 
 db.FormaPago = require('./forma_pago')(sequelize, Sequelize); 
 db.Tarifa = require('./tarifa')(sequelize, Sequelize);
 db.Moneda_tipo = require('./moneda_tipo')(sequelize, Sequelize);
@@ -36,8 +36,8 @@ db.ReservaxAdicional = require('./reserva_x_adicional')(sequelize, Sequelize);
 
 //RELACIONES
 //USUARIOS ADMINISTRADORES
-db.Usuario_tipo.hasMany(db.UsuarioAdm); //Tiene muchos
-db.UsuarioAdm.belongsTo(db.Usuario_tipo); //Pertenece a
+db.Tipo_Usuario.hasMany(db.UsuarioAdm); //Tiene muchos
+db.UsuarioAdm.belongsTo(db.Tipo_Usuario); //Pertenece a
 
 //TARIFA
 db.Moneda_tipo.hasMany(db.Tarifa);

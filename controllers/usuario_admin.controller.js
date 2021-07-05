@@ -8,7 +8,7 @@ exports.principal = (req, res) => {
 
     db.UsuarioAdm.findAll({
         attributes: ["id", "nombre", "email"],
-        include: [{ model: db.Usuario_tipo, attributes: ["id", "tipo_usuario"] }]
+        include: [{ model: db.Tipo_Usuario, attributes: ["id", "tipo_usuario"] }]
     }).then(registros => {
 
         res.status(200).send(registros);
@@ -24,7 +24,23 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    res.status(200).send({ msg: 'OK desde BUSCAR ******* ' });
+    const key = req.params.key
+    const value = req.params.value
+
+    db.UsuarioAdm.findAll({
+        where: {[key]: value},
+        atributes: ['id']
+
+    }).then(registros =>{
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
 }
 
 exports.registro = async (req, res) => {

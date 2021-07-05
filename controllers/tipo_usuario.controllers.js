@@ -1,10 +1,10 @@
 const db = require("../models");
 
 exports.principal = (req, res) => {
-  db.Usuario_tipo.findAll({
+  db.Tipo_Usuario.findAll({
     attributes: ["id", "tipo_usuario"],
     order: [
-      ["tipo_usuario", "DESC"]
+      ["id", "ASC"]
 
     ],
   })
@@ -25,7 +25,7 @@ exports.buscar = (req, res) => {
   const key = req.params.key;
   const value = req.params.value;   
 
-  db.Usuario_tipo.findAll({
+  db.Tipo_Usuario.findAll({
     attributes: ["id", "tipo_usuario"],
     where: { [key]: value},
     order: [
@@ -48,7 +48,7 @@ exports.nuevo = (req, res) => {
     tipo_usuario: req.body.tipo_usuario
   };
 
-  db.Usuario_tipo.create(nuevoRegistro)
+  db.Tipo_Usuario.create(nuevoRegistro)
     .then((reg) => {
       res.status(200).send({
         msg: "OK creado correctamente ",
@@ -72,7 +72,7 @@ exports.editar = (req, res) => {
 
   const id = req.body.id;
 
-  db.Usuario_tipo.update(registroActualizar, {
+  db.Tipo_Usuario.update(registroActualizar, {
       where: { id: id },
   })
       .then((cant) => {
@@ -96,11 +96,11 @@ exports.editar = (req, res) => {
 };
 
 exports.eliminar = async (req, res) => {
-
+console.log(req.params.id)
   try {
-      await db.Usuario_tipo.destroy({
+      await db.Tipo_Usuario.destroy({
           where: {
-            id: req.body.id
+            id: req.params.id
           }
         });
       res.status(200).send({ message: 'El Tipo de Usuario se elimino correctamente' });

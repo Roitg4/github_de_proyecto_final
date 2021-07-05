@@ -6,7 +6,7 @@ const UsuarioAdmController = require('../controllers/usuario_admin.controller');
 
 // de acceso privado
 UsuarioRoutes.get('/', auth, UsuarioAdmController.principal );//Busca a todos
-UsuarioRoutes.get('/buscar', auth, UsuarioAdmController.buscar );//Busca uno
+UsuarioRoutes.get('/buscar/:key/:value', auth, UsuarioAdmController.buscar );//Busca uno
 UsuarioRoutes.put('/editar', auth, UsuarioAdmController.editar );//Editar info de usuario
 UsuarioRoutes.delete('/eliminar', auth, UsuarioAdmController.eliminar );//Eliminar al usuario
 
