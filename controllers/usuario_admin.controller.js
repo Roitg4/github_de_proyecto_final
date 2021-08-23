@@ -28,10 +28,10 @@ exports.buscar = (req, res) => {
     const value = req.params.value
 
     db.UsuarioAdm.findAll({
-        where: {[key]: value},
+        where: { [key]: value },
         atributes: ['id']
 
-    }).then(registros =>{
+    }).then(registros => {
         res.status(200).send(registros);
     }).catch((err) => {
 
@@ -74,6 +74,41 @@ exports.registro = async (req, res) => {
     });
 }
 
+exports.verifyToken = async (req, res) => {
+
+    let token = req.body.token;
+    let verificarToken;
+
+    try {
+        console.log('secret_jwt:',secret_jwt)
+        verificarToken = jwt.verify(token, secret_jwt);
+
+    } catch (error) {
+        error.statusCode = 401;
+        //response 401
+        console.log(error);
+        res.status(401).send({ error: '401' });
+    }
+
+    console.log("RESULTADO VERIFY ", verificarToken, token)
+
+    token = jwt.sign({
+        id: verificarToken.id,
+        email: verificarToken.email
+    },
+        secret_jwt,
+        {
+            expiresIn: '1h'
+        });
+
+    const data = {
+        token: token,
+        id: verificarToken.id,
+        email: verificarToken.email
+    }
+    res.status(200).send({ data });
+}
+
 exports.login = async (req, res) => {
 
     const usuario = await db.UsuarioAdm.findOne({
@@ -89,7 +124,7 @@ exports.login = async (req, res) => {
             },
                 secret_jwt,
                 {
-                    expiresIn: '15m'
+                    expiresIn: '1h'
                 });
 
             const data = {
@@ -154,9 +189,9 @@ exports.eliminar = async (req, res) => {
     try {
         await db.UsuarioAdm.destroy({
             where: {
-              id: req.body.id
+                id: req.body.id
             }
-          });
+        });
         res.status(200).send({ message: 'El Usuario se elimino correctamente' });
     } catch (error) {
         res.status(500).send({ message: 'No se pudo efectuar la accion de eliminar', error });

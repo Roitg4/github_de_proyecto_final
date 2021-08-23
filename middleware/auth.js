@@ -4,7 +4,7 @@ const secret_jwt = require('../config/env').SECRET_JWT;
 module.exports = (req, res, next) => {
 
     const authHeader = req.headers.authorization;
-
+    console.log('***')
     if (!authHeader) {
         const error = new Error("nNo Authorization code");
         error.statusCode = 401;

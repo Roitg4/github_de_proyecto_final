@@ -49,7 +49,7 @@ app.use('/tarifa', auth, Tarifa);
 app.use('/tipo-moneda', auth, Moneda_tipo);
 app.use('/cliente', Cliente);
 app.use('/adicional', auth, Adicional);
-app.use('/alojamiento-tipo', auth, Alojamiento_tipo);
+app.use('/alojamiento-tipo', Alojamiento_tipo);
 app.use('/alojamiento-estado', auth, Alojamiento_estado);
 app.use('/alojamiento', auth, Alojamiento);
 app.use('/tarifa-x-tipo', auth, Tarifa_X_Tipo);

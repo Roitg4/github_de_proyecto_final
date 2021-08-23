@@ -19,24 +19,46 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
-
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
+  
     db.Alojamiento_tipo.findAll({
-        where: {[key]: value},
-        atributes: ['id']
-
-    }).then(registros =>{
-        res.status(200).send(registros);
-    }).catch((err) => {
-
-        res.status(500).send({
-            msg: 'Error al recuperar los datos ******* ',
-            err
-
-        });
+      attributes: ["id", "tipo_alojamiento"],
+      where: { [key]: { [Op.like]: `%${value}%` } },
+      order: [
+        ["tipo_alojamiento", "ASC"]
+      ],
     })
-}
+      .then((registros) => {
+        res.status(200).send(registros);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          msg: "Error en accceso a la base de datos",
+          error: err.errors[0].message,
+        });
+      });
+  };
+
+  exports.buscarId = (req, res) => {
+    const id = req.params.id
+  
+    db.Alojamiento_tipo.findAll({
+      attributes: ["id", "tipo_alojamiento"],
+      where: { id: id }
+  
+    }).then(registros => {
+      res.status(200).send(registros);
+    }).catch((err) => {
+  
+      res.status(500).send({
+        msg: 'Error al recuperar los datos ******* ',
+        err
+  
+      });
+    })
+  }
 
 exports.nuevo = async (req, res) => { 
 
@@ -96,11 +118,10 @@ exports.editar = (req, res) => {
 };
 
 exports.eliminar = async (req, res) => {
-
     try {
         await db.Alojamiento_tipo.destroy({
             where: {
-              id: req.body.id
+              id: req.params.id
             }
           });
         res.status(200).send({ message: 'El Tipo de alojamiento se elimino correctamente' });

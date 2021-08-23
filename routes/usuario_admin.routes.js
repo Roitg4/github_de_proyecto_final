@@ -15,6 +15,7 @@ UsuarioRoutes.delete('/eliminar', auth, UsuarioAdmController.eliminar );//Elimin
 // de acceso publico
 UsuarioRoutes.post('/registro',  UsuarioAdmController.registro );//Crear un usuario
 UsuarioRoutes.post('/login',  UsuarioAdmController.login );//Logearse con un usuario
+UsuarioRoutes.post('/verifyToken',  UsuarioAdmController.verifyToken );
 
 
 
