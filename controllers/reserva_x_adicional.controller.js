@@ -5,8 +5,9 @@ exports.principal = (req, res) => {
     db.ReservaxAdicional.findAll({
         attributes: ["id"],
         include: [{
-            model: db.Reserva, attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos", 
-            "cantidad_niños", "total_pagar", "seña", "saldo_pagar", "observacion"]},
+            model: db.Reserva, attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos",
+                "cantidad_niños", "total_pagar", "seña", "saldo_pagar", "observacion"]
+        },
         { model: db.Adicional, attributes: ["id", "tipo_adicional", "descripcion"] }]
     }).then(registros => {
 
@@ -23,14 +24,37 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
 
     db.ReservaxAdicional.findAll({
-        where: {[key]: value},
-        atributes: ['id']
+        attributes: ["id"],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["id", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
 
-    }).then(registros =>{
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.ReservaxAdicional.findAll({
+        attributes: ["id"],
+        where: { id: id }
+
+    }).then(registros => {
         res.status(200).send(registros);
     }).catch((err) => {
 
@@ -40,7 +64,7 @@ exports.buscar = (req, res) => {
 
         });
     })
-}
+};
 
 exports.nuevo = async (req, res) => {
 

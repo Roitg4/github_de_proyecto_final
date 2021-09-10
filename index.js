@@ -23,7 +23,7 @@ db.sequelize.sync(  ).then((result) => {
 });
 
 // MIDDLEWARE
-const auth = require('./middleware/auth'); 
+/* const auth = require('./middleware/auth');  */
 
 //RUTAS
 //RUTAS DEL DER
@@ -44,17 +44,17 @@ const Reserva_X_Adicional = require('./routes/reserva_x_adcional.routes');
 
 app.use('/usuario-admin', Usuario_Admin);
 app.use('/tipo-usuario', Tipo_usuario);
-app.use('/forma-pago', auth, Forma_pago);
-app.use('/tarifa', auth, Tarifa);
-app.use('/tipo-moneda', auth, Moneda_tipo);
+app.use('/forma-pago', Forma_pago);
+app.use('/tarifa', Tarifa);
+app.use('/tipo-moneda', Moneda_tipo);
 app.use('/cliente', Cliente);
-app.use('/adicional', auth, Adicional);
+app.use('/adicional', Adicional);
 app.use('/alojamiento-tipo', Alojamiento_tipo);
-app.use('/alojamiento-estado', auth, Alojamiento_estado);
-app.use('/alojamiento', auth, Alojamiento);
-app.use('/tarifa-x-tipo', auth, Tarifa_X_Tipo);
-app.use('/reservas', auth, Reserva);
-app.use('/reserva-x-adicional', auth, Reserva_X_Adicional);
+app.use('/alojamiento-estado', Alojamiento_estado);
+app.use('/alojamiento', Alojamiento);
+app.use('/tarifa-x-tipo', Tarifa_X_Tipo);
+app.use('/reservas', Reserva);
+app.use('/reserva-x-adicional', Reserva_X_Adicional);
 
 //Web 
 //Accesos get publicos

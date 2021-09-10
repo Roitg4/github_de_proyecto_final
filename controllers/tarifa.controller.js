@@ -1,4 +1,5 @@
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 exports.principal = (req, res) => {
 
@@ -7,28 +8,8 @@ exports.principal = (req, res) => {
         include: [{ model: db.Moneda_tipo, attributes: ["id", "nombre", "codigo"] }]
     }).then(registros => {
 
-    res.status(200).send(registros);
-
-    }).catch((err) => {
-
-        res.status(500).send({ 
-            msg: 'Error al recuperar los datos ******* ',
-            err
-             
-        });
-    })
-}
-
-exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
-
-    db.Tarifa.findAll({
-        where: {[key]: value},
-        atributes: ['id']
-
-    }).then(registros =>{
         res.status(200).send(registros);
+
     }).catch((err) => {
 
         res.status(500).send({
@@ -39,7 +20,52 @@ exports.buscar = (req, res) => {
     })
 }
 
-exports.nuevo = async (req, res) => { 
+exports.buscar = (req, res) => {
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
+
+    db.Tarifa.findAll({
+        attributes: ["id", "nombre", "fecha_inicio", "fecha_fin", "tarifa"],
+        include: [{ model: db.Moneda_tipo, attributes: ["id", "nombre", "codigo"] }],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["nombre", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
+
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.Tarifa.findAll({
+        attributes: ["id", "nombre", "fecha_inicio", "fecha_fin", "tarifa"],
+        include: [{ model: db.Moneda_tipo, attributes: ["id", "nombre", "codigo"] }],
+        where: { id: id }
+
+    }).then(registros => {
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
+};
+
+exports.nuevo = async (req, res) => {
 
     const nuevoTarifa = {
         nombre: req.body.nombre,
@@ -49,24 +75,24 @@ exports.nuevo = async (req, res) => {
         TipoMonedaId: req.body.TipoMonedaId
     }
 
-    console.log("Antes de guardar -> DATOS REC: ",nuevoTarifa);
+    console.log("Antes de guardar -> DATOS REC: ", nuevoTarifa);
 
-    db.Tarifa.create(nuevoTarifa).then((registro) =>{
+    db.Tarifa.create(nuevoTarifa).then((registro) => {
 
-        res.status(200).send({ 
+        res.status(200).send({
             msg: 'Creado correctamente ******* ',
-            registro    
+            registro
         });
 
-    }).catch((err) =>{
+    }).catch((err) => {
 
-        res.status(500).send({ 
+        res.status(500).send({
             msg: 'Error al crear ******* ',
             err
-             
+
         });
 
-    });  
+    });
 }
 
 exports.editar = (req, res) => {
@@ -109,9 +135,9 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Tarifa.destroy({
             where: {
-              id: req.body.id
+                id: req.body.id
             }
-          });
+        });
         res.status(200).send({ message: 'La tarifa se elimino correctamente' });
     } catch (error) {
         res.status(500).send({ message: 'No se pudo efectuar la accion de eliminar', error });

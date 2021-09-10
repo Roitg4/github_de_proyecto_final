@@ -30,7 +30,7 @@ exports.buscar = (req, res) => {
     attributes: ["id", "tipo_usuario"],
     where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
     order: [
-      ["tipo_usuario", "ASC"]
+      ["tipo_usuario", "DESC"]
     ],
   })
     .then((registros) => {

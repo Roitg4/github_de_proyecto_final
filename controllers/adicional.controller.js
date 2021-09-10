@@ -1,33 +1,14 @@
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 exports.principal = (req, res) => {
 
     db.Adicional.findAll({
-        attributes: ["id", "tipo_adicional", "descripcion" ]
+        attributes: ["id", "tipo_adicional", "descripcion"]
     }).then(registros => {
 
-    res.status(200).send(registros);
-
-    }).catch((err) => {
-
-        res.status(500).send({ 
-            msg: 'Error al recuperar los datos ******* ',
-            err
-             
-        });
-    })
-}
-
-exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
-
-    db.Adicional.findAll({
-        where: {[key]: value},
-        atributes: ['id']
-
-    }).then(registros =>{
         res.status(200).send(registros);
+
     }).catch((err) => {
 
         res.status(500).send({
@@ -38,31 +19,74 @@ exports.buscar = (req, res) => {
     })
 }
 
-exports.nuevo = async (req, res) => { 
+exports.buscar = (req, res) => {
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
+
+    db.Adicional.findAll({
+        attributes: ["id", "tipo_adicional", "descripcion"],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["tipo_adicional", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
+
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.Adicional.findAll({
+        attributes: ["id","tipo_adicional", "descripcion"],
+        where: { id: id }
+
+    }).then(registros => {
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
+};
+
+exports.nuevo = async (req, res) => {
 
     const nuevoAdicional = {
         tipo_adicional: req.body.tipo_adicional,
         descripcion: req.body.descripcion
     }
 
-    console.log("Antes de guardar -> DATOS REC: ",nuevoAdicional);
+    console.log("Antes de guardar -> DATOS REC: ", nuevoAdicional);
 
-    db.Adicional.create(nuevoAdicional).then((registro) =>{
+    db.Adicional.create(nuevoAdicional).then((registro) => {
 
-        res.status(200).send({ 
+        res.status(200).send({
             msg: 'Creado correctamente ******* ',
-            registro    
+            registro
         });
 
-    }).catch((err) =>{
+    }).catch((err) => {
 
-        res.status(500).send({ 
+        res.status(500).send({
             msg: 'Error al crear ******* ',
             err
-             
+
         });
 
-    });  
+    });
 }
 
 exports.editar = (req, res) => {
@@ -102,9 +126,9 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Adicional.destroy({
             where: {
-              id: req.body.id
+                id: req.body.id
             }
-          });
+        });
         res.status(200).send({ message: 'El adicional se elimino correctamente' });
     } catch (error) {
         res.status(500).send({ message: 'No se pudo efectuar la accion de eliminar', error });

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 const secret_jwt = require('../config/env').SECRET_JWT;
 
@@ -24,12 +25,37 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
 
     db.UsuarioAdm.findAll({
-        where: { [key]: value },
-        atributes: ['id']
+        attributes: ["id", "nombre", "email"],
+        include: [{ model: db.Tipo_Usuario, attributes: ["id", "tipo_usuario"] }],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["nombre", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
+
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.UsuarioAdm.findAll({
+        attributes: ["id", "nombre", "email"],
+        include: [{ model: db.Tipo_Usuario, attributes: ["id", "tipo_usuario"]}],
+        where: { id: id }
 
     }).then(registros => {
         res.status(200).send(registros);
@@ -41,7 +67,7 @@ exports.buscar = (req, res) => {
 
         });
     })
-}
+};
 
 exports.registro = async (req, res) => {
 
@@ -80,7 +106,7 @@ exports.verifyToken = async (req, res) => {
     let verificarToken;
 
     try {
-        console.log('secret_jwt:',secret_jwt)
+        console.log('secret_jwt:', secret_jwt)
         verificarToken = jwt.verify(token, secret_jwt);
 
     } catch (error) {

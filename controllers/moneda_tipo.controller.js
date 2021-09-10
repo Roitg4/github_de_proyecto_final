@@ -1,4 +1,5 @@
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 exports.principal = (req, res) => {
 
@@ -19,14 +20,37 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
 
     db.Moneda_tipo.findAll({
-        where: {[key]: value},
-        atributes: ['id']
+        attributes: ["id", "nombre", "codigo"],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["nombre", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
 
-    }).then(registros =>{
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.Moneda_tipo.findAll({
+        attributes:  ["id", "nombre", "codigo"],
+        where: { id: id }
+
+    }).then(registros => {
         res.status(200).send(registros);
     }).catch((err) => {
 
@@ -36,7 +60,7 @@ exports.buscar = (req, res) => {
 
         });
     })
-}
+};
 
 
 exports.nuevo = async (req, res) => { 

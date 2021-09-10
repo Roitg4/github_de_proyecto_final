@@ -1,14 +1,15 @@
 const express = require('express');
-const auth = require('../middleware/auth');
+/* const auth = require('../middleware/auth'); */
 const UsuarioRoutes = express.Router();
 
 const UsuarioAdmController = require('../controllers/usuario_admin.controller');
 
 // de acceso privado
-UsuarioRoutes.get('/', auth, UsuarioAdmController.principal );//Busca a todos
-UsuarioRoutes.get('/buscar/:key/:value', auth, UsuarioAdmController.buscar );//Busca uno
-UsuarioRoutes.put('/editar', auth, UsuarioAdmController.editar );//Editar info de usuario
-UsuarioRoutes.delete('/eliminar', auth, UsuarioAdmController.eliminar );//Eliminar al usuario
+UsuarioRoutes.get('/', UsuarioAdmController.principal );//Busca a todos
+UsuarioRoutes.get('/buscar/:key/:value', UsuarioAdmController.buscar );//Busca uno
+UsuarioRoutes.get('/buscar/:id', UsuarioAdmController.buscarId );
+UsuarioRoutes.put('/editar', UsuarioAdmController.editar );//Editar info de usuario
+UsuarioRoutes.delete('/eliminar', UsuarioAdmController.eliminar );//Eliminar al usuario
 
 
 //----------------------------------------------------------------

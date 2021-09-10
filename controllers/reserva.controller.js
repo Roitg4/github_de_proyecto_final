@@ -1,5 +1,6 @@
 const { Reserva } = require('../models');
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 exports.principal = (req, res) => {
 
@@ -7,7 +8,7 @@ exports.principal = (req, res) => {
         attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos", "cantidad_niños",
             "total_pagar", "seña", "saldo_pagar", "observacion"],
         include: [{ model: db.UsuarioAdm, attributes: ["id", "nombre", "email"] },
-        { model: db.Cliente, attributes: ["id", "email"] },
+        { model: db.Cliente, attributes: ["id", "nombre", "apellido", "email"] },
         { model: db.Alojamiento, attributes: ["id", "descripcion", "capacidad"] },
         { model: db.FormaPago, attributes: ["id", "forma_pago"] }]
     }).then(registros => {
@@ -25,14 +26,47 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
 
     db.Reserva.findAll({
-        where: {[key]: value},
-        atributes: ['id']
+        attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos", "cantidad_niños",
+            "total_pagar", "seña", "saldo_pagar", "observacion"],
+        include: [{ model: db.UsuarioAdm, attributes: ["id", "nombre", "email"] },
+        { model: db.Cliente, attributes: ["id", "nombre", "apellido", "email"] },
+        { model: db.Alojamiento, attributes: ["id", "descripcion", "capacidad"] },
+        { model: db.FormaPago, attributes: ["id", "forma_pago"] }],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["id", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
 
-    }).then(registros =>{
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.Reserva.findAll({
+        attributes: ["id", "check_in", "check_out", "cantidad_noches", "cantidad_adultos", "cantidad_niños",
+            "total_pagar", "seña", "saldo_pagar", "observacion"],
+        include: [{ model: db.UsuarioAdm, attributes: ["id", "nombre", "email"] },
+        { model: db.Cliente, attributes: ["id", "nombre", "apellido", "email"] },
+        { model: db.Alojamiento, attributes: ["id", "descripcion", "capacidad"] },
+        { model: db.FormaPago, attributes: ["id", "forma_pago"] }],
+        where: { id: id }
+
+    }).then(registros => {
         res.status(200).send(registros);
     }).catch((err) => {
 
@@ -42,7 +76,7 @@ exports.buscar = (req, res) => {
 
         });
     })
-}
+};
 
 exports.nuevo = async (req, res) => {
 

@@ -21,14 +21,37 @@ exports.principal = (req, res) => {
 }
 
 exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
 
     db.TarifaxTipo.findAll({
-        where: {[key]: value},
-        atributes: ['id']
+        attributes: ["id"],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["id", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
 
-    }).then(registros =>{
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.TarifaxTipo.findAll({
+        attributes: ["id"],
+        where: { id: id }
+
+    }).then(registros => {
         res.status(200).send(registros);
     }).catch((err) => {
 
@@ -38,7 +61,7 @@ exports.buscar = (req, res) => {
 
         });
     })
-}
+};
 
 exports.nuevo = async (req, res) => { 
 

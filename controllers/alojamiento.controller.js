@@ -1,35 +1,16 @@
 const db = require('../models');
+const Op = db.Sequelize.Op;
 
 exports.principal = (req, res) => {
 
     db.Alojamiento.findAll({
         attributes: ["id", "descripcion", "capacidad"],
-        include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"]}, 
-        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"]}]
+        include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"] },
+        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"] }]
     }).then(registros => {
 
-    res.status(200).send(registros);
-
-    }).catch((err) => {
-
-        res.status(500).send({ 
-            msg: 'Error al recuperar los datos ******* ',
-            err
-             
-        });
-    })
-}
-
-exports.buscar = (req, res) => {
-    const key = req.params.key
-    const value = req.params.value
-
-    db.Alojamiento.findAll({
-        where: {[key]: value},
-        atributes: ['id']
-
-    }).then(registros =>{
         res.status(200).send(registros);
+
     }).catch((err) => {
 
         res.status(500).send({
@@ -40,7 +21,54 @@ exports.buscar = (req, res) => {
     })
 }
 
-exports.nuevo = async (req, res) => { 
+exports.buscar = (req, res) => {
+
+    //Ruta de la pagina web
+    const key = req.params.key;
+    const value = req.params.value;
+
+    db.Alojamiento.findAll({
+        attributes: ["id", "descripcion", "capacidad"],
+        include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"] },
+        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"] }],
+        where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
+        order: [
+            ["capacidad", "ASC"]
+        ],
+    })
+        .then((registros) => {
+            res.status(200).send(registros);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                msg: "Error en accceso a la base de datos",
+                error: err.errors[0].message,
+            });
+        });
+};
+
+exports.buscarId = (req, res) => {
+    const id = req.params.id
+
+    db.Alojamiento.findAll({
+        attributes: ["id", "descripcion", "capacidad"],
+        include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"] },
+        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"] }],
+        where: { id: id }
+
+    }).then(registros => {
+        res.status(200).send(registros);
+    }).catch((err) => {
+
+        res.status(500).send({
+            msg: 'Error al recuperar los datos ******* ',
+            err
+
+        });
+    })
+};
+
+exports.nuevo = async (req, res) => {
 
     const nuevoAlojamiento = {
         descripcion: req.body.descripcion,
@@ -49,24 +77,24 @@ exports.nuevo = async (req, res) => {
         TipoAlojamientoId: req.body.TipoAlojamientoId
     }
 
-    console.log("Antes de guardar -> DATOS REC: ",nuevoAlojamiento);
+    console.log("Antes de guardar -> DATOS REC: ", nuevoAlojamiento);
 
-    db.Alojamiento.create(nuevoAlojamiento).then((registro) =>{
+    db.Alojamiento.create(nuevoAlojamiento).then((registro) => {
 
-        res.status(200).send({ 
+        res.status(200).send({
             msg: 'Creado correctamente ******* ',
-            registro    
+            registro
         });
 
-    }).catch((err) =>{
+    }).catch((err) => {
 
-        res.status(500).send({ 
+        res.status(500).send({
             msg: 'Error al crear ******* ',
             err
-             
+
         });
 
-    });  
+    });
 }
 
 exports.editar = (req, res) => {
@@ -108,9 +136,9 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Alojamiento.destroy({
             where: {
-              id: req.body.id
+                id: req.body.id
             }
-          });
+        });
         res.status(200).send({ message: 'El Alojamiento se elimino correctamente' });
     } catch (error) {
         res.status(500).send({ message: 'No se pudo efectuar la accion de eliminar', error });
