@@ -7,8 +7,8 @@ const ClienteController = require('../controllers/cliente.controller');
 ClienteRoutes.get('/', auth, ClienteController.principal );//Busca a todos
 ClienteRoutes.get('/buscar/:key/:value', auth, ClienteController.buscar );//Busca uno
 ClienteRoutes.get('/buscar/:id', auth, ClienteController.buscarId );
-ClienteRoutes.put('/editar', auth, ClienteController.editar );//Editar info de cliente
-ClienteRoutes.delete('/eliminar', auth, ClienteController.eliminar );//Eliminar al cliente
+ClienteRoutes.put('/editar:id', auth, ClienteController.editar );//Editar info de cliente
+ClienteRoutes.delete('/eliminar:id', auth, ClienteController.eliminar );//Eliminar al cliente
 
 
 //----------------------------------------------------------------

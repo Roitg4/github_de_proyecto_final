@@ -96,7 +96,7 @@ exports.editar = (req, res) => {
         descripcion: req.body.descripcion
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.Adicional.update(registroActualizar, {
         where: { id: id },
@@ -126,7 +126,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Adicional.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'El adicional se elimino correctamente' });

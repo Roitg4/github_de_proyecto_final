@@ -94,7 +94,7 @@ exports.editar = (req, res) => {
         forma_pago: req.body.forma_pago
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.FormaPago.update(registroActualizar, {
         where: { id: id },
@@ -124,7 +124,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.FormaPago.destroy({
             where: {
-              id: req.body.id
+              id: req.params.id
             }
           });
         res.status(200).send({ message: 'La forma de pago se elimino correctamente' });

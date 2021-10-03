@@ -8,8 +8,8 @@ const UsuarioAdmController = require('../controllers/usuario_admin.controller');
 UsuarioRoutes.get('/', auth, UsuarioAdmController.principal );//Busca a todos
 UsuarioRoutes.get('/buscar/:key/:value', auth, UsuarioAdmController.buscar );//Busca uno
 UsuarioRoutes.get('/buscar/:id', auth, UsuarioAdmController.buscarId );
-UsuarioRoutes.put('/editar', auth, UsuarioAdmController.editar );//Editar info de usuario
-UsuarioRoutes.delete('/eliminar', auth, UsuarioAdmController.eliminar );//Eliminar al usuario
+UsuarioRoutes.put('/editar/:id', auth, UsuarioAdmController.editar );//Editar info de usuario
+UsuarioRoutes.delete('/eliminar/:id', auth, UsuarioAdmController.eliminar );//Eliminar al usuario
 
 //----------------------------------------------------------------
 // de acceso publico

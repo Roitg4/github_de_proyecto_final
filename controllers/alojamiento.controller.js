@@ -29,8 +29,8 @@ exports.buscar = (req, res) => {
 
     db.Alojamiento.findAll({
         attributes: ["id", "descripcion", "capacidad"],
-        include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"] },
-        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"] }],
+        /* include: [{ model: db.Alojamiento_estado, attributes: ["id", "estado_alojamiento"] },
+        { model: db.Alojamiento_tipo, attributes: ["id", "tipo_alojamiento"] }], */
         where: { [key]: { [Op.like]: `%${value}%` } },  /* "%"+value+"%" */
         order: [
             ["capacidad", "ASC"]
@@ -106,7 +106,7 @@ exports.editar = (req, res) => {
         TipoAlojamientoId: req.body.TipoAlojamientoId
     };
 
-    const id = req.body.id;
+    const id = req.params.id;
 
     db.Alojamiento.update(registroActualizar, {
         where: { id: id },
@@ -132,11 +132,11 @@ exports.editar = (req, res) => {
 };
 
 exports.eliminar = async (req, res) => {
-
+    console.log(req.params.id)
     try {
         await db.Alojamiento.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'El Alojamiento se elimino correctamente' });

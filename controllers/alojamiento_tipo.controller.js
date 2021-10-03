@@ -93,7 +93,7 @@ exports.editar = (req, res) => {
     tipo_alojamiento: req.body.tipo_alojamiento
   };
 
-  const id = req.body.id;
+  const id = req.params.id;
 
   db.Alojamiento_tipo.update(registroActualizar, {
     where: { id: id },

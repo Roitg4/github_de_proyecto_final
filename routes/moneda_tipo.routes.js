@@ -7,8 +7,8 @@ TipoMonedaRoutes.get('/', TipoMonedaController.principal);
 TipoMonedaRoutes.get('/buscar/:key/:value', TipoMonedaController.buscar);
 TipoMonedaRoutes.get('/buscar/:id', TipoMonedaController.buscarId);
 TipoMonedaRoutes.post('/nuevo', TipoMonedaController.nuevo);
-TipoMonedaRoutes.put('/editar', TipoMonedaController.editar);
-TipoMonedaRoutes.delete('/eliminar', TipoMonedaController.eliminar);
+TipoMonedaRoutes.put('/editar/:id', TipoMonedaController.editar);
+TipoMonedaRoutes.delete('/eliminar/:id', TipoMonedaController.eliminar);
 
 
 module.exports = TipoMonedaRoutes;

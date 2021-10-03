@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
             required: true
         },
         capacidad:{
-            type: DataTypes.DECIMAL(),
+            type: DataTypes.DECIMAL(), //INT 
             required: true
         }
 

@@ -162,7 +162,7 @@ exports.editar = (req, res) => {
         codigo_postal: req.body.codigo_postal
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.Cliente.update(registroActualizar, {
         where: { id: id },
@@ -192,7 +192,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Cliente.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'El Cliente se elimino correctamente' });

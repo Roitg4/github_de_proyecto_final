@@ -100,7 +100,7 @@ exports.editar = (req, res) => {
         AdicionalId: req.body.AdicionalId
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.ReservaxAdicional.update(registroActualizar, {
         where: { id: id },
@@ -130,7 +130,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.ReservaxAdicional.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id,
             }
         });
         res.status(200).send({ message: 'La tabla reserva x adicional se elimino correctamente' });

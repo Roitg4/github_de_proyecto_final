@@ -90,7 +90,7 @@ exports.editar = (req, res) => {
     tipo_usuario: req.body.tipo_usuario
   };
 
-  const id = req.body.id;
+  const id = req.params.id;
 
   db.Tipo_Usuario.update(registroActualizar, {
     where: { id: id },

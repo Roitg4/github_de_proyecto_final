@@ -7,8 +7,8 @@ TarifaRoutes.get('/', TarifaController.principal);
 TarifaRoutes.get('/buscar/:key/:value', TarifaController.buscar);
 TarifaRoutes.get('/buscar/:id', TarifaController.buscarId);
 TarifaRoutes.post('/nuevo', TarifaController.nuevo);
-TarifaRoutes.put('/editar', TarifaController.editar);
-TarifaRoutes.delete('/eliminar', TarifaController.eliminar);
+TarifaRoutes.put('/editar/:id', TarifaController.editar);
+TarifaRoutes.delete('/eliminar/:id', TarifaController.eliminar);
 
 
 module.exports = TarifaRoutes;

@@ -185,7 +185,7 @@ exports.editar = (req, res) => {
         TipoUsuarioId: req.body.TipoUsuarioId
     };
 
-    const id = req.body.id;
+    const id = req.params.id;
 
     db.UsuarioAdm.update(registroActualizar, {
         where: { id: id },
@@ -215,7 +215,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.UsuarioAdm.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'El Usuario se elimino correctamente' });

@@ -105,7 +105,7 @@ exports.editar = (req, res) => {
         TipoMonedaId: req.body.TipoMonedaId
     };
 
-    const id = req.body.id;
+    const id = req.params.id;
 
     db.Tarifa.update(registroActualizar, {
         where: { id: id },
@@ -135,7 +135,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Tarifa.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'La tarifa se elimino correctamente' });

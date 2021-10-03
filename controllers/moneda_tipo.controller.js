@@ -97,7 +97,7 @@ exports.editar = (req, res) => {
         codigo: req.body.codigo
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.Moneda_tipo.update(registroActualizar, {
         where: { id: id },
@@ -127,7 +127,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Moneda_tipo.destroy({
             where: {
-              id: req.body.id
+              id: req.params.id
             }
           });
         res.status(200).send({ message: 'El tipo de moneda se elimino correctamente' });

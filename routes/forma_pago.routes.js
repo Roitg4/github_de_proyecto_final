@@ -7,8 +7,8 @@ FormaRoutes.get('/', FormaPagoController.principal);
 FormaRoutes.get('/buscar/:key/:value', FormaPagoController.buscar);
 FormaRoutes.get('/buscar/:id', FormaPagoController.buscarId);
 FormaRoutes.post('/nuevo', FormaPagoController.nuevo);
-FormaRoutes.put('/editar', FormaPagoController.editar);
-FormaRoutes.delete('/eliminar', FormaPagoController.eliminar);
+FormaRoutes.put('/editar:id', FormaPagoController.editar);
+FormaRoutes.delete('/eliminar:id', FormaPagoController.eliminar);
 
 
 module.exports = FormaRoutes;

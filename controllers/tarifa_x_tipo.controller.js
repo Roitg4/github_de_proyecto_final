@@ -97,7 +97,7 @@ exports.editar = (req, res) => {
         TipoAlojamientoId: req.body.TipoAlojamientoId
     };
 
-    const id = req.body.id;
+    const id = req.params.id;
 
     db.TarifaxTipo.update(registroActualizar, {
         where: { id: id },
@@ -127,7 +127,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.TarifaxTipo.destroy({
             where: {
-              id: req.body.id
+              id: req.params.id
             }
           });
         res.status(200).send({ message: 'La tabla tarifa x tipo de alojamiento se elimino correctamente' });

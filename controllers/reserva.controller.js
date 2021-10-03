@@ -135,7 +135,7 @@ exports.editar = (req, res) => {
         observacion: req.body.observacion
     };
 
-    const id = req.body.id;
+    const id = req.params.id
 
     db.Reserva.update(registroActualizar, {
         where: { id: id },
@@ -165,7 +165,7 @@ exports.eliminar = async (req, res) => {
     try {
         await db.Reserva.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         });
         res.status(200).send({ message: 'La Reserva  se elimino correctamente' });
