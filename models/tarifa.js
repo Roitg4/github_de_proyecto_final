@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
             required: true
         },
         tarifa: {
-            type: DataTypes.DECIMAL,
+            type: DataTypes.STRING,
             required: true
         }
 

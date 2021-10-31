@@ -176,11 +176,13 @@ exports.login = async (req, res) => {
 
 }
 
-exports.editar = (req, res) => {
+exports.editar = async (req, res) => {
+
+    const passEncriptada = await bcrypt.hash(req.body.password, 12); //ENCRIPTADO DE LA CONTRASEÑA
 
     let registroActualizar = {
         nombre: req.body.nombre,
-        password: req.body.password,
+        password: passEncriptada,
         email: req.body.email,
         TipoUsuarioId: req.body.TipoUsuarioId
     };
