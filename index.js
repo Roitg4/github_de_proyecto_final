@@ -40,6 +40,7 @@ const Alojamiento = require('./routes/alojamiento.routes');
 const Tarifa_X_Tipo = require('./routes/tarifa_x_tipo.routes');
 const Reserva = require('./routes/reserva.routes');
 const Reserva_X_Adicional = require('./routes/reserva_x_adcional.routes');
+const Web_Datos = require('./routes/web_datos.routes');
 
 
 app.use('/usuario-admin', Usuario_Admin); //Router auth
@@ -55,6 +56,7 @@ app.use('/alojamiento', auth, Alojamiento);
 app.use('/tarifa-x-tipo', auth, Tarifa_X_Tipo);
 app.use('/reservas', auth, Reserva);
 app.use('/reserva-x-adicional', auth, Reserva_X_Adicional);
+app.use('/web-datos', Web_Datos)
 
 //Web 
 //Accesos get publicos

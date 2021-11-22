@@ -7,8 +7,8 @@ AdicionalRoutes.get('/', AdicionalController.principal);
 AdicionalRoutes.get('/buscar/:key/:value', AdicionalController.buscar);
 AdicionalRoutes.get('/buscar/:id', AdicionalController.buscarId);
 AdicionalRoutes.post('/nuevo', AdicionalController.nuevo);
-AdicionalRoutes.put('/editar', AdicionalController.editar);
-AdicionalRoutes.delete('/eliminar', AdicionalController.eliminar);
+AdicionalRoutes.put('/editar/:id', AdicionalController.editar);
+AdicionalRoutes.delete('/eliminar/:id', AdicionalController.eliminar);
 
 
 module.exports = AdicionalRoutes;
